@@ -1,5 +1,7 @@
 package library;
 
+import exceptions.BookNotAvailableException;
+
 public class StaffMember extends Member {
     String position = "Librarian";
 
@@ -18,9 +20,17 @@ public class StaffMember extends Member {
 
     public void borrowBook(Book book) {
         if (borrowedBooks.size() < 5) {
-            book.borrowBook();
-            borrowedBooks.add(book);
-            System.out.println("You have successfully borrowed a copy of \"" + book.title + "\".");
+            try {
+                if (book.availableCopies < 1) {
+                    throw new BookNotAvailableException("The book \"" + book.title + "\" is not available.");
+                }
+
+                book.borrowBook();
+                borrowedBooks.add(book);
+                System.out.println("You have successfully borrowed a copy of \"" + book.title + "\".");
+            } catch (BookNotAvailableException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         } else {
             System.out.println("Sorry, you can't borrow any more books until you return your current ones.");
         }

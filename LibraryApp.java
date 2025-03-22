@@ -76,6 +76,23 @@ public class LibraryApp {
         staffMember1.returnBook(book5);
         staffMember1.displayInfo();
         System.out.println();
+        cityLibrary.displayAvailableBooks();
 
+        Book book7 = new Book(7, "Title 7", "Haruki Murakami", 1);
+        cityLibrary.addBook(book7);
+        System.out.println();
+        cityLibrary.displayAvailableBooks();
+        System.out.println();
+
+        member2.borrowBook(book7);
+        System.out.println();
+        staffMember1.borrowBook(book7);
+        System.out.println();
+        staffMember1.returnBook(book7);
+        System.out.println();
+
+        member2.displayInfo();
+        System.out.println();
+        staffMember1.displayInfo();
     }
 }

@@ -12,7 +12,11 @@ public class Library {
     }
 
     public void addBook(Book book) {
-        books.add(book);
+        if (!books.contains(book)) {
+            books.add(book);
+        } else {
+            System.out.println("The book \"" + book.title + "\" is already in the library's collections.");
+        }
     }
 
     public void registerMember(Member member) {

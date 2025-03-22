@@ -2,6 +2,9 @@ package library;
 
 import java.util.*;
 
+import exceptions.BookNotAvailableException;
+import exceptions.BookNotBorrowedException;
+
 public class Member extends Person implements Borrowable {
     List<Book> borrowedBooks = new ArrayList<>();
 
@@ -11,17 +14,36 @@ public class Member extends Person implements Borrowable {
 
     public void borrowBook(Book book) {
         if (borrowedBooks.size() < 3) {
-            book.borrowBook();
-            borrowedBooks.add(book);
-            System.out.println("You have successfully borrowed a copy of \"" + book.title + "\".");
+            try {
+                if (book.availableCopies < 1) {
+                    throw new BookNotAvailableException("The book \"" + book.title + "\" is not available.");
+                }
+
+                book.borrowBook();
+                borrowedBooks.add(book);
+                System.out.println("You have successfully borrowed a copy of \"" + book.title + "\".");
+            } catch (BookNotAvailableException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         } else {
             System.out.println("Sorry, you can't borrow any more books until you return your current ones.");
         }
     }
 
     public void returnBook(Book book) {
-        borrowedBooks.remove(book);
-        book.returnBook();
+        try {
+            if (!borrowedBooks.contains(book)) {
+                throw new BookNotBorrowedException(
+                        "Returning failed because you are not currently borrowing any copies of the book \""
+                                + book.title + "\".");
+            }
+
+            borrowedBooks.remove(book);
+            book.returnBook();
+            System.out.println("You have successfully returned a copy of the book \"" + book.title + "\".");
+        } catch (BookNotBorrowedException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public String toString() {
